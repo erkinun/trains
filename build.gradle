@@ -1,6 +1,10 @@
 apply plugin: 'java'
+apply plugin: 'checkstyle'
+apply plugin: 'application'
 
-sourceCompatibility = 1.5
+mainClassName = 'TrainSimulation'
+
+sourceCompatibility = 1.8
 version = '1.0'
 
 repositories {
