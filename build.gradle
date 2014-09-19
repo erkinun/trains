@@ -1,6 +1,7 @@
 apply plugin: 'java'
 apply plugin: 'checkstyle'
 apply plugin: 'application'
+apply plugin: 'findbugs'
 
 mainClassName = 'TrainSimulation'
 
