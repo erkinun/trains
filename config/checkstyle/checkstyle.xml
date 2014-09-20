@@ -6,6 +6,9 @@
 
 <module name="Checker">
 
+    <module name="SuppressionFilter">
+        <property name="file" value="config/checkstyle/suppressions.xml"/>
+    </module>
 
     <!-- Checks that property files contain the same keys. -->
     <module name="Translation"/>
