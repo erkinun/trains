@@ -2,6 +2,7 @@ package domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 /**
@@ -30,20 +31,20 @@ public class Graph {
         //search for town
         final char firstTownName = representation.charAt(0);
         Stream townStream = towns.stream().filter(town -> town.getName() == firstTownName);
-        long townCount = townStream.count();
+        Optional<Town> firstTownOpt = townStream.findFirst();
 
 
-        if (townCount == 1){
-            //fount
+        if (firstTownOpt.isPresent()){
+            //found
             char secondTownName = representation.charAt(1);
             Town secondTown = new Town(secondTownName);
 
-            Town firstTown = (Town) townStream.findFirst().get();
+            Town firstTown = (Town) firstTownOpt.get();
             int distance = Integer.valueOf(representation.charAt(2));
             Route route = new Route(distance, firstTown, secondTown);
             firstTown.addRoute(route);
         }
-        else if (townCount == 0){
+        else {
 
             char secondTownName = representation.charAt(1);
             Town secondTown = new Town(secondTownName);
@@ -53,10 +54,6 @@ public class Graph {
             Route route = new Route(distance, firstTown, secondTown);
             firstTown.addRoute(route);
             towns.add(firstTown);
-        }
-        else {
-            //something wrong
-            throw new IllegalStateException("There is a town with more than one instance");
         }
     }
 
