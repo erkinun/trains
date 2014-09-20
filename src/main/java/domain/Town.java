@@ -11,4 +11,16 @@ public class Town extends Node<Character, Integer> {
     public Town(Character value, Edge edge) {
         super(value, edge);
     }
+
+    public Town(Character value) {
+        super(value);
+    }
+
+    public char getName() {
+        return getValue();
+    }
+
+    public void addRoute(Route route) {
+        addEdge(route);
+    }
 }

@@ -11,6 +11,11 @@ public class Node<V, W> {
     private V value;
     private List<Edge<W>> edges;
 
+    public Node(V value) {
+        this.value = value;
+        edges = new ArrayList<Edge<W>>();
+    }
+
     public Node(V value, Edge edge) {
         this.value = value;
         edges = new ArrayList<Edge<W>>();
