@@ -6,8 +6,8 @@ package core;
 public class Edge<W> {
 
     private W weight;
-    private Vertice start;
-    private Vertice end;
+    private Node start;
+    private Node end;
 
     public W getWeight() {
         return weight;
@@ -17,19 +17,19 @@ public class Edge<W> {
         this.weight = weight;
     }
 
-    public Vertice getStart() {
+    public Node getStart() {
         return start;
     }
 
-    public void setStart(Vertice start) {
+    public void setStart(Node start) {
         this.start = start;
     }
 
-    public Vertice getEnd() {
+    public Node getEnd() {
         return end;
     }
 
-    public void setEnd(Vertice end) {
+    public void setEnd(Node end) {
         this.end = end;
     }
 }
