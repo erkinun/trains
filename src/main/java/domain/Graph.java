@@ -22,7 +22,7 @@ public class Graph {
         return towns.size();
     }
 
-    public void addTown(String representation) {
+    public void addRoute(String representation) {
         //it must be in format "AB5"
         //if not illegalargument
 

@@ -18,7 +18,7 @@ public class GraphTest {
     public void testAddTownOk() throws Exception {
         String rep = "AB5";
 
-        graph.addTown(rep);
+        graph.addRoute(rep);
 
         Assert.assertTrue(graph.size() == 1);
     }
@@ -28,8 +28,8 @@ public class GraphTest {
         String rep = "AB5";
         String rep2 = "BC4";
 
-        graph.addTown(rep);
-        graph.addTown(rep2);
+        graph.addRoute(rep);
+        graph.addRoute(rep2);
 
         Assert.assertTrue(graph.size() == 2);
     }
@@ -40,9 +40,9 @@ public class GraphTest {
         String rep2 = "BC4";
         String rep3 = "AC9";
 
-        graph.addTown(rep);
-        graph.addTown(rep2);
-        graph.addTown(rep3);
+        graph.addRoute(rep);
+        graph.addRoute(rep2);
+        graph.addRoute(rep3);
 
         Assert.assertTrue(graph.size() == 2);
     }
@@ -51,14 +51,14 @@ public class GraphTest {
     public void shouldThrowException() throws Exception {
         String rep = "";
 
-        graph.addTown(rep);
+        graph.addRoute(rep);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldThrowLongerRep() {
         String rep = "1234";
 
-        graph.addTown(rep);
+        graph.addRoute(rep);
 
     }
 
@@ -66,7 +66,7 @@ public class GraphTest {
     public void shouldThrowFormatWrong() {
         String rep = "3AB";
 
-        graph.addTown(rep);
+        graph.addRoute(rep);
 
     }
 }
