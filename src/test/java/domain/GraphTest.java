@@ -21,18 +21,22 @@ public class GraphTest {
 
         graph.addRoute(rep);
 
-        Assert.assertTrue(graph.size() == 1);
+        Assert.assertTrue(graph.size() == 2);
     }
 
     @Test
-    public void testAddTownTwo() throws Exception {
+    public void testAddTownThree() throws Exception {
         String rep = "AB5";
         String rep2 = "BC4";
 
         graph.addRoute(rep);
         graph.addRoute(rep2);
 
-        Assert.assertTrue(graph.size() == 2);
+        int sizeOfGraph = graph.size();
+
+        System.out.println("size: " + sizeOfGraph);
+
+        Assert.assertTrue(sizeOfGraph == 3);
     }
 
     @Test
@@ -45,7 +49,7 @@ public class GraphTest {
         graph.addRoute(rep2);
         graph.addRoute(rep3);
 
-        Assert.assertTrue(graph.size() == 2);
+        Assert.assertTrue(graph.size() == 3);
     }
 
     @Test

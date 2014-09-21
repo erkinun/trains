@@ -62,35 +62,16 @@ public class Graph {
         final char firstTownName = representation.charAt(0);
         Optional<Town> firstTownOpt = findTown(firstTownName);
 
+        char secondTownName = representation.charAt(1);
+        Optional<Town> secondTownOpt = findTown(secondTownName);
+        Town secondTown = secondTownOpt.orElseGet(() -> getNewTown(secondTownName));
 
-        if (firstTownOpt.isPresent()){
-            //found
-            char secondTownName = representation.charAt(1);
-            Town secondTown = new Town(secondTownName);
+        Town firstTown = firstTownOpt.orElseGet(() -> getNewTown(firstTownName));
 
-            Town firstTown = (Town) firstTownOpt.get();
-            int distance = Character.getNumericValue(representation.charAt(2));
-            Route route = new Route(distance, firstTown, secondTown);
-            firstTown.addRoute(route);
-        }
-        else {
+        int distance = Character.getNumericValue(representation.charAt(2));
+        Route route = new Route(distance, firstTown, secondTown);
+        firstTown.addRoute(route);
 
-            char secondTownName = representation.charAt(1);
-            Town secondTown = new Town(secondTownName);
-            Town firstTown = new Town(firstTownName);
-
-            int distance = Integer.valueOf(representation.charAt(2));
-            Route route = new Route(distance, firstTown, secondTown);
-            firstTown.addRoute(route);
-            towns.add(firstTown);
-
-            addGhostRoute(firstTown);
-        }
-    }
-
-    private void addGhostRoute(Town town) {
-        Route ghostRoute = new Route(0, ghostTown, town);
-        ghostTown.addRoute(ghostRoute);
     }
 
     //will find from ABC A->B->C
@@ -100,14 +81,11 @@ public class Graph {
         List<Route> routes = ghostTown.getRoutes();
 
         int distance = 0;
-        int i = 0;
         for (char stop : stops) {
 
             System.out.println("search for stop: " + stop);
 
-            for (Route rt : routes) {
-                System.out.println(rt);
-            }
+            routes.forEach(System.out::println);
 
             //find the town
             List<Route> onWay = routes.stream().filter(inner -> inner.isGoingTo(stop)).collect(Collectors.toList());
@@ -124,16 +102,30 @@ public class Graph {
             distance = distance + thisWay.getWeight();
 
             routes = thisWay.goesTo().getRoutes();
-            i++;
 
         }
 
         return distance;
     }
 
+    private Town getNewTown(char name) {
+        Town newTown = new Town(name);
+        towns.add(newTown);
+
+        addGhostRoute(newTown);
+
+        return newTown;
+    }
+
     private Optional<Town> findTown(char firstTownName) {
         Stream townStream = towns.stream().filter(town -> town.getName() == firstTownName);
         return townStream.findFirst();
+    }
+
+
+    private void addGhostRoute(Town town) {
+        Route ghostRoute = new Route(0, ghostTown, town);
+        ghostTown.addRoute(ghostRoute);
     }
 
     private void validateRepresentation(String representation) {
