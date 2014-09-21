@@ -147,6 +147,16 @@ public class GraphTest {
         Assert.assertEquals(2, findRouteNumber);
     }
 
+    @Test
+    public void findExactStepsForTrips() throws TrainsException {
+
+        createGraph();
+
+        long routeNumber = graph.findExactStepTrips('A', 'C', 4);
+
+        Assert.assertEquals(3, routeNumber);
+    }
+
     private void createGraph() {
         graph.addRoute("AB5");
         graph.addRoute("BC4");

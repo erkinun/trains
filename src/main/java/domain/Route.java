@@ -19,6 +19,10 @@ public class Route extends Edge<Integer> {
         return (Town) getEnd();
     }
 
+    public Town goesFrom() {
+        return (Town) getStart();
+    }
+
     public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append("route from: " + getStart().getValue() + " to: " + getEnd().getValue()

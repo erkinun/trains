@@ -52,16 +52,53 @@ public class Graph {
         return true;
     }
 
+    public long findExactStepTrips(char start, char end, int stops) throws TrainsException {
+
+        List<Route> availableRoutes = findStartingRoutes(start);
+
+        if (availableRoutes.size() == 0) {
+            throw new TrainsException(TrainsException.NO_SUCH_ROUTE);
+        }
+
+        List<Trip> trips = new ArrayList<>();
+        availableRoutes.stream().map(Route::goesFrom).distinct().forEach(town -> {
+            Trip trip = new Trip();
+            trip.add(town.getName());
+            trips.add(trip);
+        });
+
+        List<Trip> updatedTrips = new ArrayList<Trip>();
+        for (int step = 0; step < stops; step++) {
+
+            availableRoutes.stream().forEach(route -> {
+                trips.stream().filter(trip -> trip.getLastStop() == route.goesFrom().getName()).forEach(trip -> {
+                            Trip updateTrip = new Trip(trip);
+                            updateTrip.add(route.goesTo().getName());
+                            updatedTrips.add(updateTrip);
+                        }
+                );
+            });
+
+            trips.clear();
+            updatedTrips.forEach(trips::add);
+            updatedTrips.clear();
+
+            List<Route> tempRoutes = new ArrayList<>(availableRoutes);
+            availableRoutes.clear();
+
+            //update the new routes to be followed in next iteration
+            tempRoutes.stream().map(Route::goesTo).distinct().forEach(town ->
+                    town.getRoutes().stream().forEach(availableRoutes::add));
+        }
+
+        return trips.stream().filter(trip -> {
+            return trip.getLastStop() == end;
+        }).count();
+    }
+
     public int findTrips(char start, char end, int maxStop) throws TrainsException {
 
-        List<Route> routes = ghostTown.getRoutes();
-
-        //starting routes
-        List<Route> availableRoutes = new ArrayList<>();
-
-        routes.stream().filter(route ->
-                route.endsAt(start)).map(Route::goesTo).distinct().forEach(town ->
-                town.getRoutes().stream().forEach(availableRoutes::add));
+        List<Route> availableRoutes = findStartingRoutes(start);
 
         if (availableRoutes.size() == 0) {
             throw new TrainsException(TrainsException.NO_SUCH_ROUTE);
@@ -72,10 +109,7 @@ public class Graph {
 
         for (int step = 0; step < maxStop; step++) {
             //find finished trips
-            availableRoutes.stream().filter(route -> {
-                System.out.println(route);
-                return route.isGoingTo(end);
-            }).forEach(allFinishedRoutes::add);
+            availableRoutes.stream().filter(route -> route.isGoingTo(end)).forEach(allFinishedRoutes::add);
 
             //make room for new routes
             List<Route> tempRoutes = new ArrayList<>(availableRoutes);
@@ -120,10 +154,6 @@ public class Graph {
         int distance = 0;
         for (char stop : stops) {
 
-            System.out.println("search for stop: " + stop);
-
-            routes.forEach(System.out::println);
-
             //find the town
             List<Route> onWay = routes.stream().filter(inner -> inner.isGoingTo(stop)).collect(Collectors.toList());
 
@@ -143,6 +173,18 @@ public class Graph {
         }
 
         return distance;
+    }
+
+    private List<Route> findStartingRoutes(char start) {
+        List<Route> routes = ghostTown.getRoutes();
+
+        //starting routes
+        List<Route> availableRoutes = new ArrayList<>();
+
+        routes.stream().filter(route ->
+                route.endsAt(start)).map(Route::goesTo).distinct().forEach(town ->
+                town.getRoutes().stream().forEach(availableRoutes::add));
+        return availableRoutes;
     }
 
     private Town getNewTown(char name) {
