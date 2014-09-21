@@ -98,4 +98,54 @@ public class GraphTest {
 
         Assert.assertEquals(9, distance);
     }
+
+    @Test
+    public void shouldFind5() throws TrainsException {
+
+        createGraph();
+
+        int distance = graph.findDistance("AD");
+
+        Assert.assertEquals(5, distance);
+    }
+
+    @Test
+    public void shouldFind13() throws TrainsException {
+
+        createGraph();
+
+        int distance = graph.findDistance("ADC");
+
+        Assert.assertEquals(13, distance);
+    }
+
+    @Test
+    public void shouldFind22() throws TrainsException {
+
+        createGraph();
+
+        int distance = graph.findDistance("AEBCD");
+
+        Assert.assertEquals(22, distance);
+    }
+
+    @Test(expected = TrainsException.class)
+    public void shouldThrowNoSuchRoute() throws TrainsException {
+
+        createGraph();
+
+        int distance = graph.findDistance("AED");
+    }
+
+    private void createGraph() {
+        graph.addRoute("AB5");
+        graph.addRoute("BC4");
+        graph.addRoute("CD8");
+        graph.addRoute("DC8");
+        graph.addRoute("DE6");
+        graph.addRoute("AD5");
+        graph.addRoute("CE2");
+        graph.addRoute("EB3");
+        graph.addRoute("AE7");
+    }
 }
