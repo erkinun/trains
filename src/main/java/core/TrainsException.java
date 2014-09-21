@@ -7,7 +7,7 @@ public class TrainsException extends Exception {
 
     public static final String NO_SUCH_ROUTE = "NO SUCH ROUTE";
 
-    private String message;
+    private final String message;
 
     public TrainsException(String message) {
         super(message);

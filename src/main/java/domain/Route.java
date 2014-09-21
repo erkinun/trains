@@ -21,8 +21,8 @@ public class Route extends Edge<Integer> {
 
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("route from: " + getStart().getValue() + " to: " + getEnd().getValue() +
-                ", of distance: " + getWeight());
+        builder.append("route from: " + getStart().getValue() + " to: " + getEnd().getValue()
+                + ", of distance: " + getWeight());
 
         return builder.toString();
     }
