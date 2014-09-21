@@ -1,5 +1,6 @@
 package domain;
 
+import core.TrainsException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -47,6 +48,20 @@ public class GraphTest {
         Assert.assertTrue(graph.size() == 2);
     }
 
+    @Test
+    public void testAddThreeTowns() throws Exception {
+        graph.addRoute("AB5");
+        graph.addRoute("BC4");
+
+        Town town = new Town('B');
+        Town end = new Town('C');
+        Route route = new Route(4, town, end);
+        town.addRoute(route);
+
+        Assert.assertTrue(graph.hasTown(town));
+
+    }
+
     @Test(expected = IllegalArgumentException.class)
     public void shouldThrowException() throws Exception {
         String rep = "";
@@ -68,5 +83,15 @@ public class GraphTest {
 
         graph.addRoute(rep);
 
+    }
+
+    @Test
+    public void shouldFind9Distance() throws TrainsException {
+        graph.addRoute("AB5");
+        graph.addRoute("BC4");
+
+        int distance = graph.findDistance("ABC");
+
+        Assert.assertEquals(9, distance);
     }
 }
