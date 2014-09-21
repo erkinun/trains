@@ -52,6 +52,43 @@ public class Graph {
         return true;
     }
 
+    public int findTrips(char start, char end, int maxStop) throws TrainsException {
+
+        List<Route> routes = ghostTown.getRoutes();
+
+        //starting routes
+        List<Route> availableRoutes = new ArrayList<>();
+
+        routes.stream().filter(route ->
+                route.endsAt(start)).map(Route::goesTo).distinct().forEach(town ->
+                town.getRoutes().stream().forEach(availableRoutes::add));
+
+        if (availableRoutes.size() == 0) {
+            throw new TrainsException(TrainsException.NO_SUCH_ROUTE);
+        }
+
+        //TODO may need more work to print out the exact routes
+        List<Route> allFinishedRoutes = new ArrayList<>();
+
+        for (int step = 0; step < maxStop; step++) {
+            //find finished trips
+            availableRoutes.stream().filter(route -> {
+                System.out.println(route);
+                return route.isGoingTo(end);
+            }).forEach(allFinishedRoutes::add);
+
+            //make room for new routes
+            List<Route> tempRoutes = new ArrayList<>(availableRoutes);
+            availableRoutes.clear();
+
+            //update the new routes to be followed in next iteration
+            tempRoutes.stream().map(Route::goesTo).distinct().forEach(town ->
+                    town.getRoutes().stream().forEach(availableRoutes::add));
+        }
+
+        return allFinishedRoutes.size();
+    }
+
     public void addRoute(String representation) {
         //it must be in format "AB5"
         //if not illegalargument

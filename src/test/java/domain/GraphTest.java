@@ -137,6 +137,16 @@ public class GraphTest {
         int distance = graph.findDistance("AED");
     }
 
+    @Test
+    public void findTripsFromCtoCIn3Stops() throws TrainsException {
+
+        createGraph();
+
+        int findRouteNumber = graph.findTrips('C', 'C', 3);
+
+        Assert.assertEquals(2, findRouteNumber);
+    }
+
     private void createGraph() {
         graph.addRoute("AB5");
         graph.addRoute("BC4");

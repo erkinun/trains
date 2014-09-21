@@ -26,4 +26,12 @@ public class Route extends Edge<Integer> {
 
         return builder.toString();
     }
+
+    public boolean startsFrom(char start) {
+        return getStart().getValue().equals(start);
+    }
+
+    public boolean endsAt(char end) {
+        return getEnd().getValue().equals(end);
+    }
 }
