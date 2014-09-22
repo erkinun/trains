@@ -266,16 +266,11 @@ public class Graph {
 
             //TODO check for start and end
 
-            //unvisited.remove(start);
-            //visited.add(start);
-
             unvisited.stream().forEach(town -> distances.put(town, Integer.MAX_VALUE));
             distances.put(start, 0);
 
             //start visiting neighbors
             while (!unvisited.isEmpty()) {
-
-                System.out.println("unvisited town count: " + unvisited.size());
 
                 //get the nearest town to source
                 //first get the unvisited ones in distances map
@@ -285,8 +280,6 @@ public class Graph {
 
                 Town nearestTown = nearest.getKey();
 
-                System.out.println("inspecting town: " + nearestTown);
-
                 //remove the town from unvisited
                 unvisited.remove(nearestTown);
                 //add to visited
@@ -295,7 +288,9 @@ public class Graph {
                 //foreach neighbor of town
                 nearestTown.getRoutes().stream().forEach(route -> {
                     //calculate the distance edge distance + town distance
-                    int distance = distances.get(nearestTown) + route.getWeight();
+
+                    int distance = distances.get(nearestTown) == Integer.MAX_VALUE ? Integer.MAX_VALUE :
+                            distances.get(nearestTown)+ route.getWeight();
 
                     //if lower than dist neighbor
                     //update the neighbor distance

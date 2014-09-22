@@ -167,6 +167,36 @@ public class GraphTest {
         Assert.assertEquals(9, distance);
     }
 
+    @Test
+    public void testShortestPathAB() throws Exception {
+
+        createGraph();
+
+        int distance = graph.findShortestPathLength('A','B');
+
+        Assert.assertEquals(5, distance);
+    }
+
+    @Test
+    public void testShortestPathBE() throws Exception {
+
+        createGraph();
+
+        int distance = graph.findShortestPathLength('B','E');
+
+        Assert.assertEquals(6, distance);
+    }
+
+    @Test
+    public void testShortestPathCE() throws Exception {
+
+        createGraph();
+
+        int distance = graph.findShortestPathLength('C','E');
+
+        Assert.assertEquals(2, distance);
+    }
+
     private void createGraph() {
         graph.addRoute("AB5");
         graph.addRoute("BC4");
