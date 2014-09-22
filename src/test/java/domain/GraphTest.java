@@ -207,6 +207,17 @@ public class GraphTest {
         Assert.assertEquals(9, distance);
     }
 
+    @Test
+    public void testShortestPathAA() throws Exception {
+
+        createGraph();
+        graph.addRoute("EA2");
+
+        int distance = graph.findShortestPathLength('A','A');
+
+        Assert.assertEquals(9, distance);
+    }
+
     private void createGraph() {
         graph.addRoute("AB5");
         graph.addRoute("BC4");
