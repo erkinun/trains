@@ -257,6 +257,7 @@ public class Graph {
 
         private Comparator<Map.Entry<Town, Integer>> byDistance = (e1, e2) -> Integer.compare(e1.getValue(), e2.getValue());
 
+        //Dijkstra's shortest path alg implementation
         public int findShortestPath(Town start, Town end) {
 
             visited = new ArrayList<>();
