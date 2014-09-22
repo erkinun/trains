@@ -3,7 +3,11 @@ package domain;
 import core.TrainsException;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -175,6 +179,12 @@ public class Graph {
         return distance;
     }
 
+    public int findShortestPathLength(Town start, Town end) {
+        ShortestPathAlgorithm algorithm = new ShortestPathAlgorithm();
+
+        return algorithm.findShortestPath(start, end);
+    }
+
     private List<Route> findStartingRoutes(char start) {
         List<Route> routes = ghostTown.getRoutes();
 
@@ -228,6 +238,64 @@ public class Graph {
 
         if (!Character.isDigit(thirdChar)) {
             throw new IllegalArgumentException("third character must be a digit");
+        }
+    }
+
+    private class ShortestPathAlgorithm {
+
+        //distance to each node from source
+        private Map<Town, Integer> distances;
+        //visited nodes
+        private List<Town> visited;
+        //unvisited nodes
+        private List<Town> unvisited;
+
+        private Comparator<Map.Entry<Town, Integer>> byDistance = (e1, e2) -> Integer.compare(e1.getValue(), e2.getValue());
+
+        public int findShortestPath(Town start, Town end) {
+
+            visited = new ArrayList<>();
+            unvisited = new ArrayList<>(towns);
+            distances = new HashMap<>();
+
+            //TODO check for start and end
+
+            unvisited.remove(start);
+            visited.add(start);
+
+            unvisited.stream().forEach(town -> distances.put(town, Integer.MAX_VALUE));
+            distances.put(start, 0);
+            //start visiting neighbors
+
+            while (!unvisited.isEmpty()) {
+                //get the nearest town to source
+                //first get the unvisited ones in distances map
+                Map.Entry<Town, Integer> nearest =
+                        distances.entrySet().stream().sorted(byDistance).filter(entry ->
+                                unvisited.contains(entry.getKey())).findFirst().orElseThrow(IllegalStateException::new);
+
+                Town nearestTown = nearest.getKey();
+                //remove the town from unvisited
+                unvisited.remove(nearestTown);
+                //add to visited
+                visited.add(nearestTown);
+
+                //foreach neighbor of town
+                nearestTown.getRoutes().stream().forEach(route -> {
+                    //calculate the distance edge distance + town distance
+                    int distance = distances.get(nearestTown) + route.getWeight();
+
+                    //if lower than dist neighbor
+                    //update the neighbor distance
+                    if (distance < distances.get(route.goesTo())) {
+                        //we found a new near route
+                        distances.put(route.goesTo(), distance);
+                    }
+                });
+
+            }
+
+            return distances.get(end);
         }
     }
 }
