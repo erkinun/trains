@@ -268,7 +268,6 @@ public class Graph {
 
             unvisited.stream().forEach(town -> distances.put(town, Integer.MAX_VALUE));
             distances.put(start, 0);
-
             //start visiting neighbors
             while (!unvisited.isEmpty()) {
 
@@ -294,7 +293,8 @@ public class Graph {
 
                     //if lower than dist neighbor
                     //update the neighbor distance
-                    if (distance < distances.get(route.goesTo())) {
+                    if (distance < distances.get(route.goesTo()) || (isCyclicRoute(start, route.goesTo())
+                            && distances.get(route.goesTo()) == 0)) {
                         //we found a new near route
                         distances.put(route.goesTo(), distance);
                     }
@@ -303,6 +303,10 @@ public class Graph {
             }
 
             return distances.get(end);
+        }
+
+        private boolean isCyclicRoute(Town start, Town end) {
+            return start.equals(end);
         }
     }
 }

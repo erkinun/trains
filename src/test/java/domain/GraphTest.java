@@ -134,7 +134,7 @@ public class GraphTest {
 
         createGraph();
 
-        int distance = graph.findDistance("AED");
+        graph.findDistance("AED");
     }
 
     @Test
@@ -195,6 +195,16 @@ public class GraphTest {
         int distance = graph.findShortestPathLength('C','E');
 
         Assert.assertEquals(2, distance);
+    }
+
+    @Test
+    public void testShortestPathBB() throws Exception {
+
+        createGraph();
+
+        int distance = graph.findShortestPathLength('B','B');
+
+        Assert.assertEquals(9, distance);
     }
 
     private void createGraph() {
