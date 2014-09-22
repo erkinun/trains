@@ -157,6 +157,16 @@ public class GraphTest {
         Assert.assertEquals(3, routeNumber);
     }
 
+    @Test
+    public void testShortestPath() throws Exception {
+
+        createGraph();
+
+        int distance = graph.findShortestPathLength('A','C');
+
+        Assert.assertEquals(9, distance);
+    }
+
     private void createGraph() {
         graph.addRoute("AB5");
         graph.addRoute("BC4");

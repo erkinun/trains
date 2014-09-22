@@ -179,10 +179,15 @@ public class Graph {
         return distance;
     }
 
-    public int findShortestPathLength(Town start, Town end) {
+    public int findShortestPathLength(char start, char end) {
+
+        Optional<Town> startTown = findTown(start);
+        Optional<Town> endTown = findTown(end);
+
         ShortestPathAlgorithm algorithm = new ShortestPathAlgorithm();
 
-        return algorithm.findShortestPath(start, end);
+        return algorithm.findShortestPath(startTown.orElseThrow(IllegalArgumentException::new),
+                endTown.orElseThrow(IllegalArgumentException::new));
     }
 
     private List<Route> findStartingRoutes(char start) {
@@ -260,14 +265,17 @@ public class Graph {
 
             //TODO check for start and end
 
-            unvisited.remove(start);
-            visited.add(start);
+            //unvisited.remove(start);
+            //visited.add(start);
 
             unvisited.stream().forEach(town -> distances.put(town, Integer.MAX_VALUE));
             distances.put(start, 0);
-            //start visiting neighbors
 
+            //start visiting neighbors
             while (!unvisited.isEmpty()) {
+
+                System.out.println("unvisited town count: " + unvisited.size());
+
                 //get the nearest town to source
                 //first get the unvisited ones in distances map
                 Map.Entry<Town, Integer> nearest =
@@ -275,6 +283,9 @@ public class Graph {
                                 unvisited.contains(entry.getKey())).findFirst().orElseThrow(IllegalStateException::new);
 
                 Town nearestTown = nearest.getKey();
+
+                System.out.println("inspecting town: " + nearestTown);
+
                 //remove the town from unvisited
                 unvisited.remove(nearestTown);
                 //add to visited
