@@ -190,6 +190,48 @@ public class Graph {
                 endTown.orElseThrow(IllegalArgumentException::new));
     }
 
+    //find cycles for town
+    //get their weight
+    public int findCyclicRoutesWithMax(char town, int max) throws TrainsException {
+
+        Optional<Town> start = findTown(town);
+
+        CyclesFindAlgorithm algorithm = new CyclesFindAlgorithm();
+        List<List<Town>> lists = algorithm.findCyclesForTown(start.orElseThrow(IllegalArgumentException::new));
+
+        List<Cycle> cycles = lists.stream().map(list -> new Cycle(list)).collect(Collectors.toList());
+
+        int cycleCount = 0;
+        int cycleWeight = 0;
+
+        for (Cycle cycle : cycles) {
+            algorithm.innerCycle(cycle, cycles, cycleWeight, max);
+            int innerCount = algorithm.getCycleCount();
+            System.out.println(cycle + " found count: " + innerCount);
+            algorithm.resetCycleCount();
+            cycleCount += innerCount;
+        }
+
+        return cycleCount;
+    }
+
+
+    public int findCycleSize(char town) throws TrainsException {
+
+        Optional<Town> start = findTown(town);
+
+        CyclesFindAlgorithm algorithm = new CyclesFindAlgorithm();
+        List<List<Town>> lists = algorithm.findCyclesForTown(start.orElseThrow(IllegalArgumentException::new));
+
+        lists.stream().forEach(list -> {
+            System.out.print("Cycle of: ");
+            list.stream().forEach(tw -> System.out.print(tw.getName()));
+            System.out.println();
+        });
+
+        return lists.size();
+    }
+
     private List<Route> findStartingRoutes(char start) {
         List<Route> routes = ghostTown.getRoutes();
 
@@ -243,6 +285,93 @@ public class Graph {
 
         if (!Character.isDigit(thirdChar)) {
             throw new IllegalArgumentException("third character must be a digit");
+        }
+    }
+
+    private class CyclesFindAlgorithm {
+
+        private int cycleCount = 0;
+
+        public void innerCycle(Cycle cycle, List<Cycle> cycles, int cycleWeight, int max) {
+
+            if (cycle.getWeight() + cycleWeight < max) {
+                cycleCount++;
+            }
+            else {
+                return;
+            }
+
+            int newWeight = cycleWeight + cycle.getWeight();
+
+            for (Cycle nextCycle : cycles) {
+                innerCycle(nextCycle, cycles, newWeight, max);
+            }
+        }
+
+        public List<List<Town>> findCyclesForTown(Town parent) throws TrainsException {
+
+            //create a list for the parent town
+            List<List<Town>> cycles = new ArrayList<List<Town>>();
+
+            if (parent.getRoutes().size() == 0) {
+                throw new TrainsException(TrainsException.NO_CYCLE_ROUTE);
+            }
+
+            List<Town> parentCycle = new ArrayList<>();
+            parentCycle.add(parent);
+
+            parent.getRoutes().stream().forEach(route -> {
+                List<List<Town>> depthCycles = findInnerCycles(route.goesTo(), parentCycle);
+                if (depthCycles != null) {
+
+                    for(List<Town> townList : depthCycles) {
+                        cycles.add(townList);
+                    }
+                }
+            });
+
+            return cycles;
+        }
+
+        public int getCycleCount() {
+            return cycleCount;
+        }
+
+        private List<List<Town>> findInnerCycles(Town town, List<Town> parentCycle) {
+
+            List<Town> nodeCycles = new ArrayList<>(parentCycle);
+
+            List<List<Town>> innerCycles = new ArrayList<>();
+
+            if (nodeCycles.contains(town)) {
+                //found a cycle
+                nodeCycles.add(town);
+                innerCycles.add(nodeCycles);
+                return innerCycles;
+            }
+
+            if (town.getRoutes().size() == 0) {
+                //end of the road
+                return null;
+            }
+
+            nodeCycles.add(town);
+
+            town.getRoutes().stream().forEach(route -> {
+                List<List<Town>> childCycles = findInnerCycles(route.goesTo(), nodeCycles);
+
+                if (childCycles != null) {
+                    for (List<Town> townList : childCycles) {
+                        innerCycles.add(townList);
+                    }
+                }
+            });
+
+            return innerCycles;
+        }
+
+        public void resetCycleCount() {
+            cycleCount = 0;
         }
     }
 
@@ -307,6 +436,37 @@ public class Graph {
 
         private boolean isCyclicRoute(Town start, Town end) {
             return start.equals(end);
+        }
+    }
+
+    private class Cycle {
+        private List<Town> towns;
+        private String routeText;
+        private int weight;
+
+        private Cycle(List<Town> towns) {
+
+            routeText = (String)towns.stream().map(town -> String.valueOf(town.getName())).reduce((name, str) ->
+                    (String)name + (String)str ).get();
+
+            this.towns = towns;
+            try {
+                this.weight = findDistance(routeText);
+            } catch (TrainsException e) {
+                System.out.println(e.getMessage());
+                e.printStackTrace();
+            }
+        }
+
+        public int getWeight() {
+            return weight;
+        }
+
+        public String toString() {
+            StringBuilder builder = new StringBuilder("Cycle of route: ");
+            builder.append(routeText).append(", of weight: ").append(weight);
+
+            return builder.toString();
         }
     }
 }

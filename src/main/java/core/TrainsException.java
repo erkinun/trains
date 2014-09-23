@@ -6,6 +6,7 @@ package core;
 public class TrainsException extends Exception {
 
     public static final String NO_SUCH_ROUTE = "NO SUCH ROUTE";
+    public static final String NO_CYCLE_ROUTE = "NO CYCLE ROUTE";
 
     private final String message;
 

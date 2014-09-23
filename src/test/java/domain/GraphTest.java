@@ -218,6 +218,34 @@ public class GraphTest {
         Assert.assertEquals(9, distance);
     }
 
+    @Test
+    public void testCycleFind() throws Exception {
+
+        createGraph();
+
+        int size = graph.findCycleSize('C');
+
+        Assert.assertEquals(3, size);
+    }
+
+    @Test
+    public void shouldFind16DistanceinCycle() throws TrainsException {
+        createGraph();
+
+        int distance = graph.findDistance("CDC");
+
+        Assert.assertEquals(16, distance);
+    }
+
+    @Test
+    public void shouldCyclicRoutesBe7WithMax30() throws TrainsException {
+        createGraph();
+
+        int count = graph.findCyclicRoutesWithMax('C', 30);
+
+        Assert.assertEquals(7, count);
+    }
+
     private void createGraph() {
         graph.addRoute("AB5");
         graph.addRoute("BC4");
