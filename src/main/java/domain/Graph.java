@@ -3,7 +3,6 @@ package domain;
 import core.TrainsException;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -162,6 +161,7 @@ public class Graph {
             List<Route> onWay = routes.stream().filter(inner -> inner.isGoingTo(stop)).collect(Collectors.toList());
 
             if (onWay.size() == 0) {
+                System.out.println(distance + " could not find: " + stop );
                 throw new TrainsException(TrainsException.NO_SUCH_ROUTE);
             }
 
@@ -266,7 +266,7 @@ public class Graph {
 
     private void validateRepresentation(String representation) {
         if (representation.length() != REP_LEN) {
-            throw new IllegalArgumentException("Representation String must be length 3");
+            throw new IllegalArgumentException("Representation String must be length 3, instead: " + representation);
         }
 
         char firstChar = representation.charAt(0);

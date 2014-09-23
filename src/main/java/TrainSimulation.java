@@ -46,38 +46,37 @@ public class TrainSimulation {
 
         Graph graph = new Graph();
 
-        String routesInfo = data.replace("Graph: ", "");
+        String routesInfo = data.replace("Graph:", "");
         List<String> routes = Arrays.asList(routesInfo.split(","));
 
         for (String route : routes) {
-            graph.addRoute(route);
+            graph.addRoute(route.trim());
         }
-
 
         TrainSimulation simulation = new TrainSimulation(graph);
 
         //process the problems
         List<String> answers = new ArrayList<>();
         final String output = "OUTPUT #";
-        answers.add(output + "1" + simulation.findDistance("ABC"));
+        answers.add(output + "1 " + simulation.findDistance("ABC"));
 
-        answers.add(output + "2" + simulation.findDistance("AD"));
+        answers.add(output + "2 " + simulation.findDistance("AD"));
 
-        answers.add(output + "3" + simulation.findDistance("ADC"));
+        answers.add(output + "3 " + simulation.findDistance("ADC"));
 
-        answers.add(output + "4" + simulation.findDistance("AEBCD"));
+        answers.add(output + "4 " + simulation.findDistance("AEBCD"));
 
-        answers.add(output + "5" + simulation.findDistance("AED"));
+        answers.add(output + "5 " + simulation.findDistance("AED"));
 
-        answers.add(output + "6" + simulation.findTrips());
+        answers.add(output + "6 " + simulation.findTrips());
 
-        answers.add(output + "7" + simulation.findExactStepTrips());
+        answers.add(output + "7 " + simulation.findExactStepTrips());
 
-        answers.add(output + "8" + simulation.shortestPath('A', 'C'));
+        answers.add(output + "8 " + simulation.shortestPath('A', 'C'));
 
-        answers.add(output + "9" + simulation.shortestPath('B', 'B'));
+        answers.add(output + "9 " + simulation.shortestPath('B', 'B'));
 
-        answers.add(output + "10" + simulation.getCyclicRouteCountWithMaxDist());
+        answers.add(output + "10 " + simulation.getCyclicRouteCountWithMaxDist());
 
         try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("output.txt"),
                 "UTF-8"))) {
