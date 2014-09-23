@@ -100,6 +100,16 @@ public class GraphTest {
     }
 
     @Test
+    public void shouldFind9DistanceWithAllGraph() throws TrainsException {
+
+        createGraph();
+
+        int distance = graph.findDistance("ABC");
+
+        Assert.assertEquals(9, distance);
+    }
+
+    @Test
     public void shouldFind5() throws TrainsException {
 
         createGraph();
